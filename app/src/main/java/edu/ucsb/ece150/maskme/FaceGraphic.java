@@ -37,6 +37,7 @@ public class FaceGraphic extends GraphicOverlay.Graphic {
 
     private volatile Face mFace;
     private Context context;
+    private FaceTrackerActivity.MaskType maskType;
 
     FaceGraphic(GraphicOverlay overlay, Context context) {
         super(overlay);
@@ -44,8 +45,8 @@ public class FaceGraphic extends GraphicOverlay.Graphic {
 
     }
 
-    void setId(int id) {
-
+    void setMaskType(FaceTrackerActivity.MaskType maskType) {
+        this.maskType = maskType;
     }
 
 
@@ -68,39 +69,29 @@ public class FaceGraphic extends GraphicOverlay.Graphic {
             return;
         }
 
+        // [TODO] Draw real time masks for a single face
+
         float x = translateX(face.getPosition().x + face.getWidth() / 2);
         float y = translateY(face.getPosition().y + face.getHeight() / 2);
 
         float deltaX, deltaY;
         Bitmap mask;
 
-        deltaX = 1.3f * scaleX(mFace.getWidth()/2);
-        deltaY = 1.3f * scaleY(mFace.getHeight()/2);
+        if (maskType == FaceTrackerActivity.MaskType.SECOND) {
+            deltaX = 1.3f * scaleX(mFace.getWidth()/2);
+            deltaY = 1.3f * scaleY(mFace.getHeight()/2);
+            mask = BitmapFactory.decodeResource(context.getResources(), R.drawable.cat);
+        } else {
+            deltaX = 1f * scaleX(mFace.getWidth()/2);
+            deltaY = 1.3f * scaleY(mFace.getHeight()/2);
+            mask = BitmapFactory.decodeResource(context.getResources(), R.drawable.bear);
+        }
 
-        mask = BitmapFactory.decodeResource(context.getResources(), R.drawable.cat);
-
-
-
-
-
-
-        // [TODO] Draw real time masks for a single face
-//        Bitmap mask = BitmapFactory.decodeResource(context.getResources(), R.drawable.cat);
-
-//        double viewWidth = canvas.getWidth();
-//        double viewHeight = canvas.getHeight();
-//        double imageWidth = mask.getWidth();
-//        double imageHeight = mask.getHeight();
-
-
-        //double scale = Math.min(viewWidth / imageWidth, viewHeight / imageHeight);
 
         int left = (int) (x - deltaX);
         int top= (int) (y - deltaY);
         int right = (int) (x + deltaX);
         int bottom = (int) (y + deltaY);
-
-        Log.d("left", Integer.toString(left));
 
         Rect destBounds = new Rect(left, top, right, bottom);
         canvas.drawBitmap(mask, null, destBounds, null);

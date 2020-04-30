@@ -64,7 +64,7 @@ public class MaskedImageView extends AppCompatImageView {
     }
 
     private void drawFirstMaskOnCanvas(Canvas canvas, double scale) {
-
+        //Draw Bear mask
         // [TODO] Draw first type of mask on the static photo
         // 1. set properties of mPaint
         // 2. get positions of faces and draw masks on faces.
@@ -72,6 +72,7 @@ public class MaskedImageView extends AppCompatImageView {
     }
 
     private void drawSecondMaskOnCanvas( Canvas canvas, double scale ) {
+        //Draw Cat mask
         // [TODO] Draw second type of mask on the static photo
         // 1. set properties of mPaint
         // 2. get positions of faces and draw masks on faces.

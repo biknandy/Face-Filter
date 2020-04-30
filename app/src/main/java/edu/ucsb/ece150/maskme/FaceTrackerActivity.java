@@ -8,7 +8,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.pm.ConfigurationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -102,11 +101,11 @@ public class FaceTrackerActivity extends AppCompatActivity {
                                 public void onPictureTaken(byte[] data) {
                                     mCapturedImage = BitmapFactory.decodeByteArray(data, 0, data.length);
                                     // TODO - These lines can help with some trouble when rotating the camera. Uncomment and edit if necessary.
-//                                    int orientation = getResources().getConfiguration().orientation;
-//                                    if(orientation == Configuration.ORIENTATION_LANDSCAPE){
-//                                        mCapturedImage = rotateImage(mCapturedImage, 90.0f);
-//                                    }
-//                                    mImageView.setImageBitmap(mCapturedImage);
+                                    int orientation = getResources().getConfiguration().orientation;
+                                    if(orientation == Configuration.ORIENTATION_LANDSCAPE){
+                                        mCapturedImage = rotateImage(mCapturedImage, 90.0f);
+                                    }
+                                    mImageView.setImageBitmap(mCapturedImage);
                                 }
                             });
                         }
@@ -198,7 +197,11 @@ public class FaceTrackerActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             // [TODO] Using this as an example, implement behavior when a mask option is pressed.
-            case R.id.example:
+            case R.id.bear:
+                maskTypeDrawn = MaskType.FIRST;
+                break;
+            case R.id.cat:
+                maskTypeDrawn = MaskType.SECOND;
                 break;
             default:
                 break;
@@ -423,7 +426,7 @@ public class FaceTrackerActivity extends AppCompatActivity {
          */
         @Override
         public void onNewItem(int faceId, Face item) {
-            mFaceGraphic.setId(faceId);
+//            mFaceGraphic.setId(faceId);
         }
 
         /**
@@ -433,6 +436,7 @@ public class FaceTrackerActivity extends AppCompatActivity {
         public void onUpdate(FaceDetector.Detections<Face> detectionResults, Face face) {
             mOverlay.add(mFaceGraphic);
             mFaceGraphic.updateFace(face);
+            mFaceGraphic.setMaskType(maskTypeDrawn);
         }
 
         /**
