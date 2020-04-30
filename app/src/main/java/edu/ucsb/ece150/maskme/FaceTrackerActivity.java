@@ -102,11 +102,11 @@ public class FaceTrackerActivity extends AppCompatActivity {
                                 public void onPictureTaken(byte[] data) {
                                     mCapturedImage = BitmapFactory.decodeByteArray(data, 0, data.length);
                                     // TODO - These lines can help with some trouble when rotating the camera. Uncomment and edit if necessary.
-                                    int orientation = getResources().getConfiguration().orientation;
-                                    if(orientation == Configuration.ORIENTATION_LANDSCAPE){
-                                        mCapturedImage = rotateImage(mCapturedImage, 90.0f);
-                                    }
-                                    mImageView.setImageBitmap(mCapturedImage);
+//                                    int orientation = getResources().getConfiguration().orientation;
+//                                    if(orientation == Configuration.ORIENTATION_LANDSCAPE){
+//                                        mCapturedImage = rotateImage(mCapturedImage, 90.0f);
+//                                    }
+//                                    mImageView.setImageBitmap(mCapturedImage);
                                 }
                             });
                         }

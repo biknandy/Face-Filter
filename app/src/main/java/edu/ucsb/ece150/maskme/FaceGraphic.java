@@ -17,9 +17,13 @@
 package edu.ucsb.ece150.maskme;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.util.Log;
 
 import edu.ucsb.ece150.maskme.camera.GraphicOverlay;
 import com.google.android.gms.vision.face.Face;
@@ -29,54 +33,19 @@ import com.google.android.gms.vision.face.Face;
  * graphic overlay view.
  */
 public class FaceGraphic extends GraphicOverlay.Graphic {
-    private static final float FACE_POSITION_RADIUS = 10.0f;
-    private static final float ID_TEXT_SIZE = 40.0f;
-    private static final float ID_Y_OFFSET = 50.0f;
-    private static final float ID_X_OFFSET = -50.0f;
-    private static final float BOX_STROKE_WIDTH = 5.0f;
 
-    private static final int COLOR_CHOICES[] = {
-            Color.BLUE,
-            Color.CYAN,
-            Color.GREEN,
-            Color.MAGENTA,
-            Color.RED,
-            Color.WHITE,
-            Color.YELLOW
-    };
-    private static int mCurrentColorIndex = 0;
-
-    private Paint mFacePositionPaint;
-    private Paint mIdPaint;
-    private Paint mBoxPaint;
 
     private volatile Face mFace;
-    private int mFaceId;
-    private float mFaceHappiness;
-
     private Context context;
+
     FaceGraphic(GraphicOverlay overlay, Context context) {
         super(overlay);
         this.context = context;
 
-        mCurrentColorIndex = (mCurrentColorIndex + 1) % COLOR_CHOICES.length;
-        final int selectedColor = COLOR_CHOICES[mCurrentColorIndex];
-
-        mFacePositionPaint = new Paint();
-        mFacePositionPaint.setColor(selectedColor);
-
-        mIdPaint = new Paint();
-        mIdPaint.setColor(selectedColor);
-        mIdPaint.setTextSize(ID_TEXT_SIZE);
-
-        mBoxPaint = new Paint();
-        mBoxPaint.setColor(selectedColor);
-        mBoxPaint.setStyle(Paint.Style.STROKE);
-        mBoxPaint.setStrokeWidth(BOX_STROKE_WIDTH);
     }
 
     void setId(int id) {
-        mFaceId = id;
+
     }
 
 
@@ -102,7 +71,42 @@ public class FaceGraphic extends GraphicOverlay.Graphic {
         float x = translateX(face.getPosition().x + face.getWidth() / 2);
         float y = translateY(face.getPosition().y + face.getHeight() / 2);
 
+        float deltaX, deltaY;
+        Bitmap mask;
+
+        deltaX = 1.3f * scaleX(mFace.getWidth()/2);
+        deltaY = 1.3f * scaleY(mFace.getHeight()/2);
+
+        mask = BitmapFactory.decodeResource(context.getResources(), R.drawable.cat);
+
+
+
+
+
+
         // [TODO] Draw real time masks for a single face
+//        Bitmap mask = BitmapFactory.decodeResource(context.getResources(), R.drawable.cat);
+
+//        double viewWidth = canvas.getWidth();
+//        double viewHeight = canvas.getHeight();
+//        double imageWidth = mask.getWidth();
+//        double imageHeight = mask.getHeight();
+
+
+        //double scale = Math.min(viewWidth / imageWidth, viewHeight / imageHeight);
+
+        int left = (int) (x - deltaX);
+        int top= (int) (y - deltaY);
+        int right = (int) (x + deltaX);
+        int bottom = (int) (y + deltaY);
+
+        Log.d("left", Integer.toString(left));
+
+        Rect destBounds = new Rect(left, top, right, bottom);
+        canvas.drawBitmap(mask, null, destBounds, null);
+
+
+
 
     }
 }
