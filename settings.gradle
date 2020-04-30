@@ -1,0 +1,2 @@
+rootProject.name='MaskMe'
+include ':app'

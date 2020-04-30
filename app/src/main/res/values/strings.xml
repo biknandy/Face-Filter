@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MaskMe</string>
+
+    <string name="permissionCameraRationale">Access to the camera is needed for detection</string>
+</resources>
