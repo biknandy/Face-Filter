@@ -79,6 +79,7 @@ public class MaskedImageView extends AppCompatImageView {
         for (int i = 0; i < faces.size() ; i++){
             Face face = faces.valueAt(i);
 
+
             float x = (float) scale*(face.getPosition().x + face.getWidth()/2);
             float y = (float) scale*(face.getPosition().y + face.getHeight()/2);
 
@@ -95,8 +96,8 @@ public class MaskedImageView extends AppCompatImageView {
             int right = (int) (x + deltaX);
             int bottom = (int) (y + deltaY);
 
-            Rect destBounds = new Rect(left, top, right, bottom);
-            canvas.drawBitmap(mask, null, destBounds, null);
+            Rect maskBounds = new Rect(left, top, right, bottom);
+            canvas.drawBitmap(mask, null, maskBounds, null);
 
 
         }
@@ -128,8 +129,8 @@ public class MaskedImageView extends AppCompatImageView {
             int right = (int) (x + deltaX);
             int bottom = (int) (y + deltaY);
 
-            Rect destBounds = new Rect(left, top, right, bottom);
-            canvas.drawBitmap(mask, null, destBounds, null);
+            Rect maskBounds = new Rect(left, top, right, bottom);
+            canvas.drawBitmap(mask, null, maskBounds, null);
 
 
         }

@@ -13,6 +13,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
@@ -33,6 +34,7 @@ import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import edu.ucsb.ece150.maskme.camera.CameraSourcePreview;
@@ -44,6 +46,7 @@ import edu.ucsb.ece150.maskme.camera.GraphicOverlay;
  */
 public class FaceTrackerActivity extends AppCompatActivity {
     private static final String TAG = "FaceTracker";
+    static final String PREFS = "PrefsFile";
 
     private CameraSource mCameraSource = null;
     private CameraSourcePreview mPreview;
@@ -77,7 +80,7 @@ public class FaceTrackerActivity extends AppCompatActivity {
      * Initializes the UI and initiates the creation of a face detector.
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_face_tracker);
 
@@ -101,11 +104,12 @@ public class FaceTrackerActivity extends AppCompatActivity {
                                 public void onPictureTaken(byte[] data) {
                                     mCapturedImage = BitmapFactory.decodeByteArray(data, 0, data.length);
                                     // TODO - These lines can help with some trouble when rotating the camera. Uncomment and edit if necessary.
-                                    int orientation = getResources().getConfiguration().orientation;
-                                    if(orientation == Configuration.ORIENTATION_LANDSCAPE){
-                                        mCapturedImage = rotateImage(mCapturedImage, 90.0f);
-                                    }
+//                                    int orientation = getResources().getConfiguration().orientation;
+//                                    if(orientation == Configuration.ORIENTATION_LANDSCAPE){
+//                                        mCapturedImage = rotateImage(mCapturedImage, 90.0f);
+//                                    }
                                     mImageView.setImageBitmap(mCapturedImage);
+
                                 }
                             });
                         }
@@ -118,9 +122,12 @@ public class FaceTrackerActivity extends AppCompatActivity {
             }
         });
 
+
+
         previewButtonVisible = false;
         mLeftButton = (Button) findViewById(R.id.leftButton);
         mLeftButton.setVisibility(View.GONE);
+
         mLeftButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -151,8 +158,12 @@ public class FaceTrackerActivity extends AppCompatActivity {
             }
         });
 
+
         mImageView = new MaskedImageView(getApplicationContext());
         mImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+
+
+
 
         // Check for permissions before accessing the camera. If the permission is not yet granted,
         // request permission from the user.
@@ -162,6 +173,45 @@ public class FaceTrackerActivity extends AppCompatActivity {
         } else {
             requestCameraPermission();
         }
+
+        if (savedInstanceState != null){
+            mCapturedImage = savedInstanceState.getParcelable("img");
+            previewButtonVisible = savedInstanceState.getBoolean("button");
+            if (previewButtonVisible){
+                mLeftButton.setVisibility(View.VISIBLE);
+            }
+        }
+
+        if (mCapturedImage != null){
+            Log.d("parcel", Integer.toString(mCapturedImage.getDensity()));
+        }
+
+
+    }
+
+    @Override
+    public void onSaveInstanceState (Bundle outState){
+
+        super.onSaveInstanceState(outState);
+
+
+//        Bitmap resizedBitmap = Bitmap.createScaledBitmap(mCapturedImage, 400, 250, false);
+
+        Bitmap resized =  resize(mCapturedImage, 400, 250);
+
+//        if (mCapturedImage !=null ){
+//            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+//                Bitmap resizedBitmap = resize(mCapturedImage, 700, 200);
+//                outState.putParcelable("img", resizedBitmap);
+//            } else {
+        outState.putParcelable("img", resized);
+//            }
+        outState.putBoolean("button", true);
+//        }
+
+
+
+
     }
 
     /**
@@ -456,6 +506,27 @@ public class FaceTrackerActivity extends AppCompatActivity {
         @Override
         public void onDone() {
             mOverlay.remove(mFaceGraphic);
+        }
+    }
+
+    private static Bitmap resize(Bitmap image, int maxWidth, int maxHeight) {
+        if (maxHeight > 0 && maxWidth > 0) {
+            int width = image.getWidth();
+            int height = image.getHeight();
+            float ratioBitmap = (float) width / (float) height;
+            float ratioMax = (float) maxWidth / (float) maxHeight;
+
+            int finalWidth = maxWidth;
+            int finalHeight = maxHeight;
+            if (ratioMax > ratioBitmap) {
+                finalWidth = (int) ((float)maxHeight * ratioBitmap);
+            } else {
+                finalHeight = (int) ((float)maxWidth / ratioBitmap);
+            }
+            image = Bitmap.createScaledBitmap(image, finalWidth, finalHeight, true);
+            return image;
+        } else {
+            return image;
         }
     }
 }
