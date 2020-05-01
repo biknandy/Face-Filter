@@ -174,6 +174,8 @@ public class FaceTrackerActivity extends AppCompatActivity {
             requestCameraPermission();
         }
 
+        //restore saved instance on rotate for saved image
+
         if (savedInstanceState != null){
             mCapturedImage = savedInstanceState.getParcelable("img");
             previewButtonVisible = savedInstanceState.getBoolean("button");
@@ -182,9 +184,6 @@ public class FaceTrackerActivity extends AppCompatActivity {
             }
         }
 
-        if (mCapturedImage != null){
-            Log.d("parcel", Integer.toString(mCapturedImage.getDensity()));
-        }
 
 
     }
@@ -195,11 +194,9 @@ public class FaceTrackerActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
 
 
-//        Bitmap resizedBitmap = Bitmap.createScaledBitmap(mCapturedImage, 400, 250, false);
-
-        //Bitmap resized =  resize(mCapturedImage, 200, 100);
 
 
+        //Handle rotation by resizing bitmap of captured image
 
         if (mCapturedImage !=null ){
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
@@ -252,6 +249,7 @@ public class FaceTrackerActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             // [TODO] Using this as an example, implement behavior when a mask option is pressed.
+            //Change mask type and mask image on click of options items
             case R.id.bear:
                 maskTypeDrawn = MaskType.FIRST;
                 mImageView.drawMask(mFaces, MaskType.FIRST);
@@ -308,6 +306,8 @@ public class FaceTrackerActivity extends AppCompatActivity {
      */
     private void createCameraSource() {
         // [TODO] Create a face detector for real time face detection
+
+        //FACE DETECTION AND CAMERA
         // 1. Get the application's context
 
         Context context = getApplicationContext();
