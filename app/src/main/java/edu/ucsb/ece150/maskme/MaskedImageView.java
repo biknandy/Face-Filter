@@ -2,6 +2,7 @@ package edu.ucsb.ece150.maskme;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -10,6 +11,10 @@ import android.util.SparseArray;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import com.google.android.gms.vision.face.Face;
+import com.google.android.gms.vision.face.Landmark;
+
+import java.util.List;
+
 import edu.ucsb.ece150.maskme.FaceTrackerActivity.MaskType;
 
 public class MaskedImageView extends AppCompatImageView {
@@ -66,8 +71,40 @@ public class MaskedImageView extends AppCompatImageView {
     private void drawFirstMaskOnCanvas(Canvas canvas, double scale) {
         //Draw Bear mask
         // [TODO] Draw first type of mask on the static photo
-        // 1. set properties of mPaint
+
+
+
         // 2. get positions of faces and draw masks on faces.
+
+        for (int i = 0; i < faces.size() ; i++){
+            Face face = faces.valueAt(i);
+
+            float x = (float) scale*(face.getPosition().x + face.getWidth()/2);
+            float y = (float) scale*(face.getPosition().y + face.getHeight()/2);
+
+            float deltaX, deltaY;
+            Bitmap mask;
+
+            deltaX = (float) (1.1f * scale * (face.getWidth()/2));
+            deltaY = (float) (1.3f * scale  * (face.getHeight()/2));
+            mask = BitmapFactory.decodeResource(getResources(), R.drawable.bear);
+
+//            int left = (int) face.getPosition().x;
+//            int top= (int) face.getPosition().y;
+//            int right = (int) (left + face.getWidth());
+//            int bottom = (int) (top + face.getHeight());
+
+
+            int left = (int) (x - deltaX);
+            int top= (int) (y - deltaY);
+            int right = (int) (x + deltaX);
+            int bottom = (int) (y + deltaY);
+
+            Rect destBounds = new Rect(left, top, right, bottom);
+            canvas.drawBitmap(mask, null, destBounds, null);
+
+
+        }
 
     }
 

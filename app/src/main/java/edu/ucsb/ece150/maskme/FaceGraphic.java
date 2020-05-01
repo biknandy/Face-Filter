@@ -37,7 +37,7 @@ public class FaceGraphic extends GraphicOverlay.Graphic {
 
     private volatile Face mFace;
     private Context context;
-    private FaceTrackerActivity.MaskType maskType;
+    private FaceTrackerActivity.MaskType maskType = FaceTrackerActivity.MaskType.FIRST;
 
     FaceGraphic(GraphicOverlay overlay, Context context) {
         super(overlay);
