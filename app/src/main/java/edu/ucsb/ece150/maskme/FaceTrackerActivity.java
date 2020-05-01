@@ -179,8 +179,32 @@ public class FaceTrackerActivity extends AppCompatActivity {
         if (savedInstanceState != null){
             mCapturedImage = savedInstanceState.getParcelable("img");
             previewButtonVisible = savedInstanceState.getBoolean("button");
+            boolean previewMode = savedInstanceState.getBoolean("preview");
             if (previewButtonVisible){
                 mLeftButton.setVisibility(View.VISIBLE);
+
+            }
+
+            //keep rotation of preview mode
+            if (!previewMode){
+                mImageView.setImageBitmap(mCapturedImage);
+                mPreview.addView(mImageView);
+                mPreview.bringChildToFront(mImageView);
+
+                mLeftButton.setText("Back");
+                mCenterButton.setText("Save");
+                buttonsMode = ButtonsMode.BACK_SAVE;
+
+                detectStaticFaces(mCapturedImage);
+                mImageView.drawMask(mFaces, maskTypeDrawn);
+            }
+            else {
+                mPreview.removeView(mImageView);
+                mFaces.clear();
+
+                mLeftButton.setText("Preview");
+                mCenterButton.setText("Capture");
+                buttonsMode = ButtonsMode.PREVIEW_CAPTURE;
             }
         }
 
@@ -207,6 +231,12 @@ public class FaceTrackerActivity extends AppCompatActivity {
                 Bitmap resized = Bitmap.createScaledBitmap(mCapturedImage, 480/2, 640/2, true);
                 outState.putParcelable("img", resized);
                 Log.d("TEST", "HELLO");
+            }
+            if (buttonsMode == ButtonsMode.PREVIEW_CAPTURE){
+                outState.putBoolean ("preview", true);
+            }
+            else {
+                outState.putBoolean("preview", false);
             }
             outState.putBoolean("button", true);
         }
