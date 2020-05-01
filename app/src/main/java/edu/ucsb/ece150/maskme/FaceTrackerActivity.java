@@ -180,6 +180,8 @@ public class FaceTrackerActivity extends AppCompatActivity {
             mCapturedImage = savedInstanceState.getParcelable("img");
             previewButtonVisible = savedInstanceState.getBoolean("button");
             boolean previewMode = savedInstanceState.getBoolean("preview");
+            boolean maskState = savedInstanceState.getBoolean("masktype");
+
             if (previewButtonVisible){
                 mLeftButton.setVisibility(View.VISIBLE);
 
@@ -206,6 +208,16 @@ public class FaceTrackerActivity extends AppCompatActivity {
                 mCenterButton.setText("Capture");
                 buttonsMode = ButtonsMode.PREVIEW_CAPTURE;
             }
+
+            //Check current mask state in the application
+
+            if (maskState){
+                maskTypeDrawn = MaskType.FIRST;
+                mImageView.drawMask(mFaces, MaskType.FIRST);
+            } else {
+                maskTypeDrawn = MaskType.SECOND;
+                mImageView.drawMask(mFaces, MaskType.SECOND);
+            }
         }
 
 
@@ -223,6 +235,8 @@ public class FaceTrackerActivity extends AppCompatActivity {
         //Handle rotation by resizing bitmap of captured image
 
         if (mCapturedImage !=null ){
+
+            //Send configuration and img
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
                 Bitmap resized = Bitmap.createScaledBitmap(mCapturedImage, 640/2, 480/2, true);
                 outState.putParcelable("img", resized);
@@ -232,13 +246,23 @@ public class FaceTrackerActivity extends AppCompatActivity {
                 outState.putParcelable("img", resized);
                 Log.d("TEST", "HELLO");
             }
+
+            //Send if in Preview mode or not
             if (buttonsMode == ButtonsMode.PREVIEW_CAPTURE){
                 outState.putBoolean ("preview", true);
             }
             else {
                 outState.putBoolean("preview", false);
             }
+
             outState.putBoolean("button", true);
+
+            //Send mask
+            if (maskTypeDrawn == MaskType.FIRST){
+                outState.putBoolean ("masktype", true);
+            } else {
+                outState.putBoolean ("masktype", false);
+            }
         }
 
 
