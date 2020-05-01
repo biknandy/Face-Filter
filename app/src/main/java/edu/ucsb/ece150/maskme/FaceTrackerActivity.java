@@ -203,11 +203,11 @@ public class FaceTrackerActivity extends AppCompatActivity {
 
         if (mCapturedImage !=null ){
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-                Bitmap resized = Bitmap.createScaledBitmap(mCapturedImage, 400, 500, true);
+                Bitmap resized = Bitmap.createScaledBitmap(mCapturedImage, 640/2, 480/2, true);
                 outState.putParcelable("img", resized);
 
             } else {
-                Bitmap resized = Bitmap.createScaledBitmap(mCapturedImage, 1000, 400, true);
+                Bitmap resized = Bitmap.createScaledBitmap(mCapturedImage, 480/2, 640/2, true);
                 outState.putParcelable("img", resized);
                 Log.d("TEST", "HELLO");
             }
@@ -342,7 +342,7 @@ public class FaceTrackerActivity extends AppCompatActivity {
             //    and continuously stream those images into the detector and
             //    its associated MultiProcessor
             mCameraSource = new CameraSource.Builder(context, mStaticFaceDetector)
-                    .setRequestedPreviewSize(720, 1280)
+                    .setRequestedPreviewSize(640, 480)
                     .setFacing(CameraSource.CAMERA_FACING_FRONT)
                     .setRequestedFps(30.0f)
                     .build();
