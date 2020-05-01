@@ -197,17 +197,22 @@ public class FaceTrackerActivity extends AppCompatActivity {
 
 //        Bitmap resizedBitmap = Bitmap.createScaledBitmap(mCapturedImage, 400, 250, false);
 
-        Bitmap resized =  resize(mCapturedImage, 400, 250);
+        //Bitmap resized =  resize(mCapturedImage, 200, 100);
 
-//        if (mCapturedImage !=null ){
-//            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-//                Bitmap resizedBitmap = resize(mCapturedImage, 700, 200);
-//                outState.putParcelable("img", resizedBitmap);
-//            } else {
-        outState.putParcelable("img", resized);
-//            }
-        outState.putBoolean("button", true);
-//        }
+
+
+        if (mCapturedImage !=null ){
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+                Bitmap resized = Bitmap.createScaledBitmap(mCapturedImage, 400, 500, true);
+                outState.putParcelable("img", resized);
+
+            } else {
+                Bitmap resized = Bitmap.createScaledBitmap(mCapturedImage, 1000, 400, true);
+                outState.putParcelable("img", resized);
+                Log.d("TEST", "HELLO");
+            }
+            outState.putBoolean("button", true);
+        }
 
 
 
@@ -249,9 +254,11 @@ public class FaceTrackerActivity extends AppCompatActivity {
             // [TODO] Using this as an example, implement behavior when a mask option is pressed.
             case R.id.bear:
                 maskTypeDrawn = MaskType.FIRST;
+                mImageView.drawMask(mFaces, MaskType.FIRST);
                 break;
             case R.id.cat:
                 maskTypeDrawn = MaskType.SECOND;
+                mImageView.drawMask(mFaces, MaskType.SECOND);
                 break;
             default:
                 break;
@@ -335,7 +342,7 @@ public class FaceTrackerActivity extends AppCompatActivity {
             //    and continuously stream those images into the detector and
             //    its associated MultiProcessor
             mCameraSource = new CameraSource.Builder(context, mStaticFaceDetector)
-                    .setRequestedPreviewSize(640, 480)
+                    .setRequestedPreviewSize(720, 1280)
                     .setFacing(CameraSource.CAMERA_FACING_FRONT)
                     .setRequestedFps(30.0f)
                     .build();
@@ -509,24 +516,25 @@ public class FaceTrackerActivity extends AppCompatActivity {
         }
     }
 
-    private static Bitmap resize(Bitmap image, int maxWidth, int maxHeight) {
-        if (maxHeight > 0 && maxWidth > 0) {
-            int width = image.getWidth();
-            int height = image.getHeight();
-            float ratioBitmap = (float) width / (float) height;
-            float ratioMax = (float) maxWidth / (float) maxHeight;
-
-            int finalWidth = maxWidth;
-            int finalHeight = maxHeight;
-            if (ratioMax > ratioBitmap) {
-                finalWidth = (int) ((float)maxHeight * ratioBitmap);
-            } else {
-                finalHeight = (int) ((float)maxWidth / ratioBitmap);
-            }
-            image = Bitmap.createScaledBitmap(image, finalWidth, finalHeight, true);
-            return image;
-        } else {
-            return image;
-        }
-    }
+//    private static Bitmap resize(Bitmap image, int maxWidth, int maxHeight) {
+//
+//        if (maxHeight > 0 && maxWidth > 0) {
+//            int width = image.getWidth();
+//            int height = image.getHeight();
+//            float ratioBitmap = (float) width / (float) height;
+//            float ratioMax = (float) maxWidth / (float) maxHeight;
+//
+//            int finalWidth = maxWidth;
+//            int finalHeight = maxHeight;
+//            if (ratioMax > ratioBitmap) {
+//                finalWidth = (int) ((float)maxHeight * ratioBitmap);
+//            } else {
+//                finalHeight = (int) ((float)maxWidth / ratioBitmap);
+//            }
+//            image = Bitmap.createScaledBitmap(image, finalWidth, finalHeight, true);
+//            return image;
+//        } else {
+//            return image;
+//        }
+//    }
 }

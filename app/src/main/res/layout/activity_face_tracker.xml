@@ -34,37 +34,35 @@
 
     <FrameLayout
         android:id="@+id/cameraDisplay"
-        android:layout_width="match_parent"
-        android:layout_height="601dp"
-        android:layout_alignWithParentIfMissing="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_above="@id/centerButton"
-        android:layout_below="@+id/appToolbar"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_gravity="center"
-        android:layout_marginTop="26dp"
-        android:layout_marginRight="0dp"
-        android:background="@android:color/darker_gray">
+        android:layout_alignParentTop="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:background="@android:color/darker_gray"
+        android:layout_gravity="center">
 
         <edu.ucsb.ece150.maskme.camera.CameraSourcePreview
             android:id="@+id/preview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignWithParentIfMissing="true"
+            android:layout_gravity="center"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:layout_gravity="center">
+            android:layout_alignParentTop="true"
+            android:layout_alignWithParentIfMissing="true">
 
             <edu.ucsb.ece150.maskme.camera.GraphicOverlay
                 android:id="@+id/faceOverlay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignWithParentIfMissing="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
-                android:layout_gravity="center" />
+                android:layout_alignParentTop="true"
+                android:layout_alignWithParentIfMissing="true" />
 
         </edu.ucsb.ece150.maskme.camera.CameraSourcePreview>
 
